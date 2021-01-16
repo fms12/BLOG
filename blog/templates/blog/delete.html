@@ -1,0 +1,24 @@
+{% extends 'blog/base.html' %}
+{% block title %} DELETE Blog Post {% endblock title %}
+
+{% block content %}
+
+
+
+<h1 class="display-1 mb-20 text-white show-on-scroll show-on-scroll-ready" data-show-duration="500" data-show-distance="10" style="transform: translateY(0px); transition-duration: 500ms; opacity: 1;">DELETE.</h1>
+
+
+<h3>DELETE:{{post.title}}</h3>
+<div class="form-group">
+    <form method="POST">
+        {% csrf_token %}
+        <strong>Are you sure you want to !</strong><br>
+        {% comment %}   use csrf_token so the hacker cant hack the form submission{% endcomment %}
+        <button class="btn btn-outline-warning " >DELETE</button>
+    </form>
+
+</div>
+
+
+
+{% endblock content %}

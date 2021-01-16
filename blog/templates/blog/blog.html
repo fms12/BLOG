@@ -1,0 +1,45 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block title %} create a new blog{% endblock title %}
+
+{% block content %}
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+<style>
+h1{
+        font-family: 'Bangers', cursive;
+        font-size:99px;
+        margin-bottom: 20px;
+        border-bottom: 5px solid black;
+        }
+.btn:hover{
+    color:yellow;
+}
+</style>
+{% if user.is_authenticated%}
+    <h1 class="mt-2 text-center  ">ADD POST</h1>
+    <div class="form-group ">
+        <form method="POST" enctype="multipart/form-data">  
+        {% comment %} enctype allow to acc the image  {% endcomment %}
+            {% csrf_token %}
+            {% comment %}   use csrf_token so the hacker cant hack the form submission{% endcomment %}
+            {{form.media}}
+            {% comment %} media give the text editor in body {% endcomment %}
+            {{form.as_p}}
+            {% comment %} {{form.as_p}} we can use as_p with ul,table ,etc {% endcomment %}
+            <button class="btn btn-outline-warning btn-lg bg-dark" >POST</button>
+        </form>
+
+    </div>
+    <script>
+    var name = ' {{ user.id }}';
+    document.getElementById("elder").value = name;
+    </script>
+{% else %}
+
+<h1>SORRY!NOT ALLOWED</i></h1>
+
+{% endif %}
+
+
+{% endblock content %}

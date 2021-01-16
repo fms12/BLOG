@@ -1,0 +1,35 @@
+{% extends 'blog/base.html' %}
+{% block title %} Edit Blog Post {% endblock title %}
+
+{% block content %}
+
+
+{% if user.is_authenticated%}
+    <h1 class="display-1 mb-20 text-white show-on-scroll show-on-scroll-ready" data-show-duration="500" data-show-distance="10" style="transform: translateY(0px); transition-duration: 500ms; opacity: 1;">UPDATE.</h1>
+
+
+    <style>
+    h1{
+        margin-bottom: 50px;
+    }
+    </style>
+    <div class="form-group">
+        <form method="post">
+            {% csrf_token %}
+            {% comment %}   use csrf_token so the hacker can't hack the form submission{% endcomment %}
+            {{form.media}} 
+             {% comment %} media give the text editor in body {% endcomment %}
+            {{form.as_p}}
+            {% comment %} {{form.as_p}} we can use as_p with ul,table ,etc {% endcomment %}
+            <button class="btn btn-outline-warning" >UPDATE</button>
+        </form>
+
+    </div>
+{% else %}
+<h1>SOORY!! YOU ARE NOT ALLOWED HERE </h1>
+
+{% endif %}
+
+
+
+{% endblock content %}

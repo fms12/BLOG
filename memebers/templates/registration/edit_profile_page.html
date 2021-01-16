@@ -1,0 +1,40 @@
+{% extends 'blog/base.html' %}
+{% block title %} Edit Profile Page {% endblock title %}
+
+{% block content %}
+{% if user.is_authenticated%}
+    
+    {% if user.id == profile.user.id %}
+        
+    <h1 class='text-center'>Edit Profile Page</h1>
+    <style>
+    
+    </style>
+    <div class="form-group">
+        <form method="POST" enctype="multipart/form-data">  
+        {% comment %} enctype allow to acc the image  {% endcomment %}
+             {% csrf_token %}
+            {% comment %}   use csrf_token so the hacker cant hack the form submission{% endcomment %}
+            {{form.media}}  
+            {% comment %} media give the text editor in body {% endcomment %}
+             {{form.as_p}}
+             {% comment %} {{form.as_p}} we can use as_p with ul,table ,etc {% endcomment %} 
+           <div class="d-grid gap-2">
+                <button class="btn btn-outline-primary d-grid" type="button">UPDATE PROFILE</button>
+            </div>
+
+
+
+        </form>
+
+    </div>
+        
+{% else %}
+    you are not the correct user
+
+{% endif %}
+    your are not allowed here
+{% endif %} 
+
+
+{% endblock %}

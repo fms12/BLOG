@@ -1,0 +1,129 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block title %}~(: BL0G ~  {% endblock title %}
+
+{% block content %}
+
+<style>
+ h1{
+    text-align: center;
+} 
+.row{
+     margin-right: calc(var(--bs-gutter-x)/ 2);
+}
+			
+#box{
+    background-color:#49beb7;
+    -webkit-box-shadow: 14px -20px 0px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+#category-text{
+    border: 2px solid #ececec;
+    background: #43a2a6;
+    border-radius: 5px;
+    padding: 2px;
+}
+.button{
+    
+   
+    background-color: red;
+}
+.btn1{
+    border-box: 1px solid;
+    background-color: red;
+}
+a .btn{
+    color:#facf5a;
+}
+
+</style>
+
+
+{% if category_post %}
+    
+    
+
+
+<h1 class="display-1 mb-20 text-white show-on-scroll show-on-scroll-ready" data-show-duration="500" data-show-distance="10" style="transform: translateY(0px); transition-duration: 500ms; opacity: 1;">{{cats}}</h1>
+
+
+<div class="container mt-3">
+    <div class="row my-4 ">
+
+{% for post  in category_post %}
+       
+        <div class="col-md-6 ">
+            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" id="box">
+                <div class="col p-4 d-flex flex-column position-static">
+                    {% comment %} <strong class="d-inline-block mb-2 text-primary">
+                        {{ post.title }}
+                    </strong> {% endcomment %}
+                    <div class='border-bottom'>
+                        <h3 class="mb-0">{{ post.title }}</h3> 
+
+                        <strong class="d-inline-block mb-2 text-primary" id="#category-text">
+                            {{post.category}}
+                        </strong> 
+                    </div>
+                    <div class="mb-2 mt-2">
+                   {{ post.post_date }} by  {{ post.author.first_name }} {{ post.author.last_name }}
+                    </div>  
+                       {% comment %} if you want to show the less content  in  home page then "slice:" give amount of content to you want ot show to in the page  {% endcomment %}
+                    <p class="card-text mb-auto">{{ post.body|slice:200|slugify }}....</p>
+                    <div class="link mb-2 mt-3">
+                    <a href="{% url 'article' post.pk%}" class="stretched-link">Continue reading</a>
+                    </div>
+                    {% comment %} still have to adjust this thing happen after user login then user easly delete his/her post throug home page {% endcomment %}
+                    {% if user.is_authenticated %} 
+                    <div class='text-right mx-3 my-3 mt-3'>
+                         <a href="{% url 'update' post.pk%}"><i class="fa fa-edit fa-2x"></i></a>
+                        
+                        <a href="{% url 'delete' post.pk%}" ><i class="fa fa-trash fa-2x"></i></a>
+                    </div> 
+                     {% endif %}
+                </div>
+                
+                 <div class="col-auto d-none d-lg-block overflow-hidden position-relative" >
+                {% if post.header_image %}   
+                    <img src="/media/{{post.header_image}}" class="bd-placeholder-img" width="250" height="250" aria-label="Placeholder: Thumbnail">
+            
+                 {% else %}
+                            <img src="{% static 'theblog/image/deafult_image.png' %}" class="bd-placeholder-img" width="250" height="250" aria-label="Placeholder: Thumbnail " alt="...">
+                {% endif %}
+                </div>
+            </div>
+        </div>
+        {% comment %} The current iteration of the loop (1-indexed) it show how many post is post by the user  {% endcomment %}
+        {% if forloop.counter|divisibleby:2%}
+    </div>
+        <div class="row my-4">
+        {%endif%}
+        {%endfor%}</div>
+</div>
+
+{% comment %} old content {% endcomment %}
+{% comment %} <li><a href="{% url 'article' post.pk%}">{{ post.title }}</a> 
+    - {{post.category}}
+    - {{post.author.first_name}}
+    {{post.author.last_name}}
+     - {{post.post_date}}
+    
+
+
+
+
+    {% if user.is_authenticated %}  
+        <a href="{% url 'update' post.pk%}">EDIT</a><br>
+        <a href="{% url 'delete' post.pk%}">DELETE</a><br>
+    {% endif %}
+        {{post.body|slice:":200"|safe}}</li> {% endcomment %}
+<a href="{% url 'home' %}"class="btn btn-outline-warning" > BACK</a>
+
+
+
+{% else %}
+    <h1>OOPS! SOMETHING WENT WRONG</h1>
+    <a href="{% url 'home' %}"class="btn btn-outline-warning" > BACK</a>
+{% endif %}
+
+
+{% endblock content %}

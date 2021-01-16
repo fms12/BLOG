@@ -1,0 +1,192 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block title %} {{ post.title_tag }}{% endblock title %}
+{% block content %}
+
+<style>
+body {
+background-color:#ff5959;
+}
+
+</style>
+<div class="container"> 
+   <div class="row mt-4">
+        <div class="col-md-8 blog-main">
+            <h3 class="pb-4 mb-4 font-italic border-bottom">
+                {{post.title}}
+            </h3>
+
+            <div class="blog-post">
+                <h2 class="blog-post-title">{{post.heading0}}</h2>
+                <p class="blog-post-meta">
+                {{ post.post_date }} <a href="#">By : {{ post.author.first_name }} 
+                {{ post.author.last_name }} </a></p>
+
+                <p>{{ post.body|safe}}</p>
+                
+
+
+
+{% comment %} /////////////////////////////here it is my old UI ////////////////////////////////// {% endcomment %}
+
+{% comment %} <h1>{{ post.title }}-{{post.id}}</h1> 
+<small>By : {{ post.author.first_name }} 
+                {{ post.author.last_name }} 
+                {{ post.post_date }}
+</small> {% endcomment %}
+
+{% comment %} safe remove the html format in the blog or escape from the html{% endcomment %}
+{% comment %} {{ post.body|safe}} {% endcomment %}
+{% comment %} if here use to show the image if the only uploded  {% endcomment %}
+{% if post.header_image %}  
+{% comment %} it show the image in the </article> {% endcomment %}
+<img src="{{post.header_image.url}}" alt="">
+{% endif %}
+
+               
+            </div><!-- /.blog-post -->
+
+        </div><!-- /.blog-main -->
+<br>
+<br>
+{% comment %} <div class="delete"> {% endcomment %}
+{% if user.is_authenticated %}
+        {% if user.id == post.author.id%}
+                <div class="text-right">
+                        <a href="{% url 'delete' post.pk%}">DELETE</a><br>
+                        <a href="{% url 'update' post.pk%}">EDIT</a><br>
+                </div>
+        {% endif %}
+
+
+{% endif %}
+<div class="likes  mb-4 "> 
+<a href="{% url 'home' %}"class="btn btn-danger" > BACK</a>
+ <br>
+ <br>
+
+
+<form action="{% url 'like_post' post.pk %}" method="POST">
+        {% csrf_token %}
+
+{% if user.is_authenticated %}
+        
+        
+        {% if liked %}
+                <button type="submit", name='post_id', value='{{post.id}}', class="btn btn-outline-danger"><i class="fa fa-thumbs-down fa-2x"></i>
+                </button> 
+        {% else %}
+                <button type="submit", name='post_id', value='{{post.id}}', class="btn btn-outline-primary" ><i class="fa fa-thumbs-up fa-2x"></i></button>
+        {% endif %}
+
+        {% else %}
+        <a href="{% url 'login' %}"class="btn btn-danger" >login to like</a>
+{% endif %}
+        - {{total_likes}} Likes
+</form>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} here the user profile in the artile reading page {% endcomment %}
+<aside class="col-md-4 blog-sidebar row" style="max-width: 540px;">
+        <div class="p-4 mb-3 bg-light rounded">
+                <h4 class="font-italic border-bottom">Author</h4>
+                 <p class="mb-0 card-text blog-slidebar"> <em>{{post.author.profile.BIO}}</em> </p> 
+
+                {% comment %} <p class="card-text">{{post.author.profile.BIO}}</p>
+                <p class="card-text"><small class="text-muted"></small></p>  {% endcomment %}
+
+{% comment %} <div class="card mb-3 p-4 bg-light rounded " style="max-width: 540px;"> {% endcomment %}
+  <div class="row-0 text-right">
+    <div class="col-md-4 ">
+    
+    {% if post.author.profile.profile_pic %}            
+      <img src='{{post.author.profil.profile_pic}}' class="card-img-top" alt="...">
+    {% else %}
+      <img src="{% static 'theblog/image/deafult_image.png' %}" class="card-img" alt="...">
+    {% endif %}
+    </div>
+    <div class="col-md-10">
+      <div class="card-body">
+        <h5 class="card-title">{{ post.author.first_name }} 
+                {{ post.author.last_name }}
+        </h5>
+
+{% comment %}  {% endcomment %}
+             <div class="wrapper">
+        {% comment %} using if why because if the  user do not have anything which is listed below so these things not show in the website {% endcomment %}
+                 {% if post.author.profile.website_url %}
+                        <a href="{{post.author.profil.website_url}}"><i class="fa fa-2x fa-google"></i></a>
+                {% endif %}
+                {% if post.author.profile.facebook_url %}
+                        <a href="{{post.author.profil.facebook_url}}"><i class="fa fa-facebook fa-2x" aria-hidden="true"></i></a>
+                {% endif %}
+                {% if post.author.profile.twitter_url %}                        
+                        <a href="{{post.author.profil.twitter_url}}"><i class=" fa fa-2x fa-twitter-square"></i></a>
+                {% endif %}
+                {% if post.author.profile.instagram_url %}
+                           <a href="{{post.author.profil.instagram_url}}"><i class="fa fa-instagram fa-2x" aria-hidden="true"></i></a>
+                   {% endif %}
+                {% if post.author.profile.pinterest_url %}        
+                         <a href="{{post.author.profil.pinterest_url}}"><i class="fa fa-pinterest fa-2x" aria-hidden="true"></i></a>
+                {% endif %}
+             </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+</aside>
+
+        </div>
+</div>
+
+
+
+
+
+<div class="container">
+<h2>Comments</h2>
+<div class="row">
+        <div class="col-md-2">image here</div>
+        <div class="col-md-10">Comment here</div>
+</div>
+</div>
+
+
+{% comment %}
+comment section using djanog in built  
+
+<hr>
+
+<h2>Comments</h2>
+ 
+ {% if not post.comments.all %}
+        no Comments yet <a href="">Add a comment</a>
+{% else %}
+        {% for comment in post.comments.all  %}
+                <strong>
+                        {{comment.name}} -
+                        {{comment.date_added}}
+                </strong>
+                <br>
+                {{comment.body}}
+
+
+
+        {% endfor %}         
+ {% endif %}
+       <hr>  
+
+{% endcomment %}
+
+{% endblock content %} 

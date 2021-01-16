@@ -1,0 +1,50 @@
+{% extends 'blog/base.html' %}
+{% block title %}EDIT PROFILE {% endblock title %}
+
+{% block content %}
+
+
+
+<h1 class="text-center text-white">EDIT PROFILE</h1>
+<style>
+h1{
+    margin-bottom: 50px;
+    border-bottom: 4px solid white;
+    padding-bottom:48px;
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+{{user.profile.BIO}}
+
+<div class="form-group text-white ">
+    <form method="post">
+        {% csrf_token %}
+        {% comment %}   use csrf_token so the hacker cant hack the form submission{% endcomment %}
+        {{form.as_p}}
+        {% comment %} {{form.as_p}} we can use as_p with ul,table ,etc {% endcomment %}
+         <button class="btn btn-outline-warning" >Update Profile</button>
+    </form>
+
+</div> 
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}
