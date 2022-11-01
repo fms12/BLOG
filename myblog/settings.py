@@ -126,7 +126,10 @@ STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
+# Media root is used to upload user-generated content. We can serve user-uploaded media files from MEDIA_ROOT. 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+#  static file dir is used to upload user-generated content. We can serve user-uploaded files from MEDIA_ROOT. 
 STATICFILES_DIR = os.path.join(BASE_DIR,'static')
+#  login can redirect to home by
 LOGIN_REDIRECT_URL ='home'
 LOGOUT_REDIRECT_URL = 'home'
